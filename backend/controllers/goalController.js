@@ -1,5 +1,8 @@
 //@descr Get Goals
 //@route GET /api/goals
+
+const { Error } = require("mongoose")
+
 //@access private
 const getGoals = (req, res) => {
     res.status(200).json({message:'Set Goal'})
@@ -9,6 +12,11 @@ const getGoals = (req, res) => {
 //@route POST /api/goals
 //@access private
 const setGoal = (req, res) => {
+    if(!req.body.text){
+        res.status(400)
+        throw new Error('Plz insert Textfield')
+    }
+
     res.status(200).json({message:'Set Goal'})
 }
 
