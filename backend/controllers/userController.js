@@ -1,24 +1,68 @@
+const jwt = require('jsonwebtoken')
+const bcrypt = require('bcryptjs')
+const asyncHandler = require('express-async-handler')
+const User = require('../models/usermodel')
+
 
 //@desc     Register new User
 //@route    POST  /apis/users
 //@access   public
-const registerUser = (req, res) => {
-    res.json({message: 'Register User'})
-}
+const registerUser = asyncHandler(async (req, res) => {
+
+    const {name, email, password } = req.body
+
+    if(!name || !email || !password){
+        res.status(400)
+        throw new Error('Please add all feilds')
+    }
+
+    //check if user already Exists
+    const userExists = await User.findOne({email})
+
+    if(userExists)
+    {
+        res.status(400)
+        throw new Error('a User with that Email Already Exists')
+    }
+
+    //Hash password
+    const salt = await bcrypt.genSalt(10)
+    const hashedPassword = await bcrypt.hash(password, salt)
+
+    //Create User
+    const user = await User.create({
+        name,
+        email,
+        password: hashedPassword
+    })
+
+    if(user){
+        res.status(201).json({
+            _id: user.id,
+            name: user.name,
+            email: user.email
+        })
+    }else{
+        res.status(400)
+        throw new Error('Invalid User dat')
+    }
+
+    //res.json({message: 'Register User'})
+})
 
 //@desc     Authenticate a User
 //@route    POST  /apis/users/login
 //@access   public
-const loginUser = (req, res) => {
+const loginUser = asyncHandler(async (req, res) => {
     res.json({message: 'Register User'})
-}
+})
 
 //@desc    Get user dat
 //@route    GET  /apis/users/me
 //@access   public
-const getMe = (req, res) => {
-    res.json({message: 'User data'})
-}
+const getMe = asyncHandler(async (req, res) => {
+    res.json({message: 'Register User'})
+})
 
 
 
