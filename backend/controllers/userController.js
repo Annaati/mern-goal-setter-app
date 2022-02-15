@@ -78,7 +78,7 @@ const loginUser = asyncHandler(async (req, res) => {
 //@route    GET  /apis/users/me
 //@access   public
 const getMe = asyncHandler(async (req, res) => {
-    res.json({message: 'Register User'})
+    res.json({message: 'Get User data'})
 })
 
 
