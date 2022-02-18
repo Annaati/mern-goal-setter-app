@@ -78,7 +78,15 @@ const loginUser = asyncHandler(async (req, res) => {
 //@route    GET  /apis/users/me
 //@access   public
 const getMe = asyncHandler(async (req, res) => {
-    res.json({message: 'Get User data'})
+
+    const {_id, name, email} = await User.findById(req.user.id)
+    res.status(200).json({
+        id: _id,
+        name,
+        email
+    })
+
+    //res.json({message: 'Get User data'})
 })
 
 
